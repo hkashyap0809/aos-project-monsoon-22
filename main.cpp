@@ -9,7 +9,9 @@
 using namespace std;
 queue<int> q;
 queue<int> q2;
-	
+double fifo_ratio;
+double fifo_2nd_ratio;
+double optimal_ratio;
 // If page found, updates the second chance bit to true
 static bool fifo_search(int pg,int arr[],
 				int frames)
@@ -38,7 +40,7 @@ static bool fifo_search(int pg,int arr[],
 	
 }
 
-static void fifo_printHitsAndFaults(string reference_string,
+double fifo_printHitsAndFaults(string reference_string,
 											int frames)
 {
 	int pointer, i, l=0, pg;
@@ -137,6 +139,7 @@ static void fifo_printHitsAndFaults(string reference_string,
     cout << "Total page hits = " << ph << "\n";
     double r =ph/pf;  
      cout<<"hit to fault ratio =" << r <<endl;
+	 return r;
 }
 
 
@@ -169,7 +172,7 @@ static bool fifo_2nd_searchAndUpdate(int pg,int arr[],
 
 
 
-static void fifo_2nd_printHitsAndFaults(string reference_string,
+ double fifo_2nd_printHitsAndFaults(string reference_string,
 											int frames)
 {
 	int pointer, i, l=0, pg;
@@ -319,6 +322,7 @@ static void fifo_2nd_printHitsAndFaults(string reference_string,
     std::cout.precision(2);
     std::cout.setf(std::ios::fixed);
     cout<<"hit to fault ratio =" << r <<endl;
+	return r;
 
 }
 
@@ -368,7 +372,7 @@ int predict(string pg[], int fr[], int pn, int index , int fn)
 	return (res == -1) ? 0 : res;
 }
 
-void optimalPage(string reference_string, int fn)
+double optimalPage(string reference_string, int fn)
 {
 	// Create an array for given number of
 	// frames and initialize it as empty.
@@ -447,13 +451,14 @@ void optimalPage(string reference_string, int fn)
 	cout << "Total page faults were = " << pf << endl;
      double r =ph/pf;  
      cout<<"hit to fault ratio =" << r <<endl;
+	 return r ;
 }
 
 
 
 int main( int argc, const char * argv[]){
     
-    if (argc<3) {
+    if (argc<2) {
         cout<<"Invalid number of arguments"<<endl;
     }
     
