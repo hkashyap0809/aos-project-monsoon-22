@@ -492,18 +492,22 @@ int main( int argc, const char * argv[]){
             case 5:
                  fifo_2nd_printHitsAndFaults(reference_string,frames);
                  break;
-            case 6:
+            case 6:{
                 pr=new Clock();
                 pr->simulatePageReplacement(input,frames);
-                break;
-            case 9:
+				cout<<"Hit Rate is "<<pr->getHitRate()<<endl;
+				}
+				break;
+            case 9:{
                 pr=new WS();
-                 pr->simulatePageReplacement(input,frames);
-                break;
+                pr->simulatePageReplacement(input,frames);
+				cout<<"Hit Rate is "<<pr->getHitRate()<<endl;
+				}	
+				break;
             case 11:{
-
                 pr= new WSClock();
-                 pr->simulatePageReplacement(input,frames);
+                pr->simulatePageReplacement(input,frames);
+				cout<<"Hit Rate is "<<pr->getHitRate()<<endl;
                 }
                 break;
             default:

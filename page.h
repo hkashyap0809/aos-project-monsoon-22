@@ -29,6 +29,8 @@ protected:
     virtual void runclock()=0;
     virtual int replacePage(int pagenum)=0;
 public:
+    virtual double getHitRate(){return double(hitcount)/(hitcount+misscount);};
+    virtual double getMissRate(){return double(misscount)/(hitcount+misscount);};
     virtual void simulatePageReplacement(const vector<int> refVec , int framesize)=0;
 };
 
