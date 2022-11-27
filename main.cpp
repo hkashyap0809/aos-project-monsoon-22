@@ -137,8 +137,8 @@ double fifo_printHitsAndFaults(string reference_string,
 	}
 	cout << "Total page faults = " << pf << "\n";
     cout << "Total page hits = " << ph << "\n";
-    double r =ph/pf;  
-     cout<<"hit to fault ratio =" << r <<endl;
+    double r =ph/ph+pf;  
+     cout<<"hit rate =" << r <<endl;
 	 return r;
 }
 
@@ -318,10 +318,10 @@ static bool fifo_2nd_searchAndUpdate(int pg,int arr[],
 	}
 	cout << "Total page faults = " << pf << "\n";
     cout << "Total page hits = " << ph << "\n";
-    double r =ph/pf;    
+    double r =ph/ph+pf;    
     std::cout.precision(2);
     std::cout.setf(std::ios::fixed);
-    cout<<"hit to fault ratio =" << r <<endl;
+    cout<<"hit rate  =" << r <<endl;
 	return r;
 
 }
@@ -449,8 +449,8 @@ double optimalPage(string reference_string, int fn)
 	}
 	cout << "No. of hits = " << ph << endl;
 	cout << "Total page faults were = " << pf << endl;
-     double r =ph/pf;  
-     cout<<"hit to fault ratio =" << r <<endl;
+     double r =ph/ph+pf;  
+     cout<<"hit rate =" << r <<endl;
 	 return r ;
 }
 
@@ -465,7 +465,7 @@ int main( int argc, const char * argv[]){
     int frames=  stoi(argv[1]);
     
     //const vector<int> input{2,6,1,5,7,7,7,5,1,6,2,3,4,1,2,3,4,4,4};
-    const vector<int> input{2, 5, 10, 1, 2, 2, 6, 9, 1, 2, 10, 2, 6, 1, 2, 1, 6, 9, 5, 1};
+  const vector<int> input{2, 5, 10, 1, 2, 2, 6, 9, 1, 2, 10, 2, 6, 1, 2, 1, 6, 9, 5, 1};
     string reference_string = "2 5 10 1 2 2 6 9 1 2 10 2 6 1 2 1 6 9 5 1";
  
     int flag;
@@ -494,7 +494,7 @@ int main( int argc, const char * argv[]){
                  break;
             case 6:
                 pr=new Clock();
-                 pr->simulatePageReplacement(input,frames);
+                pr->simulatePageReplacement(input,frames);
                 break;
             case 9:
                 pr=new WS();
