@@ -12,6 +12,6 @@ Code will prompt to enter user wants to run in 'single policy mode' or 'all poli
 
 then we need to enter number of frames
 
-Curently page seq of lenth 100 is hardcoded in code but we can take input as well from user
+Curently page seq of length 100 is hardcoded in code but we can take input as well from user
 
 In "all policies" mode "graph will be plotted" to compare all algorithms in terms of hit rate
