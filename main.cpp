@@ -69,9 +69,10 @@ void takeInput(int &frames, string &input)
 	cout << "Enter the number of frames : ";
 	cin >> frames;
 	cin.ignore();
-	cout << "Enter the page sequence : ";
-	getline(cin, input);
-	cout << "\n";
+	//cout << "Enter the page sequence : ";
+	//getline(cin, input);
+	input = "42 65 30 23 71 76 82 58 10 93 17 80 39 62 100 13 92 16 34 73 79 37 61 41 25 17 51 38 72 95 21 9 32 57 62 53 75 84 85 66 91 33 62 20 97 24 12 50 77 3 49 1 45 82 56 90 62 11 99 99 99 99 99 99 87 29 14 82 36 40 5 17 80 39 62 100 13 92 16 34 73 79 37 61 41 25 52 51 38 94 59 83 19 43 68 63 44 15 81 18";
+	cout <<input.length() << "\n";
 }
 
 // *********************************************
