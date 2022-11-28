@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include <vector>
 #include <unordered_set>
+#include <fstream>
 using namespace std;
 
 double fifo_ratio;
@@ -874,7 +875,7 @@ double fifo_printHitsAndFaults(string reference_string, int frames)
 	// cout << "Total page faults = " << pf << "\n";
 	// cout << "Total page hits = " << ph << "\n";
 	double r = ph / (ph + pf);
-	//cout << "Hit Rate : " << r << endl;
+	// cout << "Hit Rate : " << r << endl;
 	return r;
 }
 
@@ -1027,7 +1028,7 @@ double fifo_2nd_printHitsAndFaults(string reference_string,
 	double r = ph / (pf + ph);
 	std::cout.precision(2);
 	std::cout.setf(std::ios::fixed);
-	//cout << "Hit Rate : " << r << endl;
+	// cout << "Hit Rate : " << r << endl;
 	return r;
 }
 
@@ -1166,7 +1167,7 @@ double optimalPage(string reference_string, int fn)
 	// cout << "No. of hits = " << ph << endl;
 	// cout << "Total page faults were = " << pf << endl;
 	double r = ph / (ph + pf);
-	//cout << "Hit Rate : " << r << endl;
+	// cout << "Hit Rate : " << r << endl;
 	return r;
 }
 
@@ -1299,6 +1300,22 @@ public:
 
 // *********************************************
 // *********************************************
+void writeToFile(vector<double> &vec)
+{
+	ofstream fp;
+	fp.open("hitRate.txt");
+	if (!fp)
+	{
+		cout << "Unable to open file\n";
+	}
+
+	for (auto it : vec)
+	{
+		fp << it << ",";
+	}
+
+	fp.close();
+}
 
 void simulateAllPolicies()
 {
@@ -1399,6 +1416,8 @@ void simulateAllPolicies()
 	hitRate = pr->getHitRate();
 	cout << "Hit Rate : " << hitRate << "\n";
 	hitRates.push_back(hitRate);
+
+	writeToFile(hitRates);
 }
 
 int main(int argc, const char *argv[])
