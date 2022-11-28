@@ -11,6 +11,7 @@
 #include <vector>
 #include <unordered_set>
 #include <fstream>
+#include <stdlib.h>
 using namespace std;
 
 double fifo_ratio;
@@ -1420,6 +1421,8 @@ void simulateAllPolicies()
 	writeToFile(hitRates);
 }
 
+int system(const char *command);
+
 int main(int argc, const char *argv[])
 {
 	int frames;
@@ -1437,6 +1440,7 @@ int main(int argc, const char *argv[])
 		if (choice == 2)
 		{
 			simulateAllPolicies();
+			system("python3 plotGraph.py");
 		}
 
 		if (choice == 1)
@@ -1492,6 +1496,8 @@ int main(int argc, const char *argv[])
 				takeInput(frames, input);
 				double hitRate = fifo_printHitsAndFaults(input, frames);
 				cout << "Hit Rate : " << hitRate << "\n";
+				
+				
 			}
 			break;
 			case 5:
