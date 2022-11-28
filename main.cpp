@@ -874,7 +874,7 @@ double fifo_printHitsAndFaults(string reference_string, int frames)
 	// cout << "Total page faults = " << pf << "\n";
 	// cout << "Total page hits = " << ph << "\n";
 	double r = ph / (ph + pf);
-	cout << "Hit Rate : " << r << endl;
+	//cout << "Hit Rate : " << r << endl;
 	return r;
 }
 
@@ -1027,7 +1027,7 @@ double fifo_2nd_printHitsAndFaults(string reference_string,
 	double r = ph / (pf + ph);
 	std::cout.precision(2);
 	std::cout.setf(std::ios::fixed);
-	cout << "Hit Rate : " << r << endl;
+	//cout << "Hit Rate : " << r << endl;
 	return r;
 }
 
@@ -1166,7 +1166,7 @@ double optimalPage(string reference_string, int fn)
 	// cout << "No. of hits = " << ph << endl;
 	// cout << "Total page faults were = " << pf << endl;
 	double r = ph / (ph + pf);
-	cout << "Hit Rate : " << r << endl;
+	//cout << "Hit Rate : " << r << endl;
 	return r;
 }
 
