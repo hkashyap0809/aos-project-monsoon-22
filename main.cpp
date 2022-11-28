@@ -881,6 +881,102 @@ double fifo_printHitsAndFaults(string reference_string, int frames)
 	return r;
 }
 
+double fifo_printHitsAndFaults_2(string reference_string, int frames)
+{
+	int pointer, i, l = 0, pg;
+	float pf;
+	float ph;
+
+	// initially we consider frame 0 is to be replaced
+	int pos = 0;
+
+	// number of page faults
+	pf = 0;
+	ph = 0;
+
+	// Create a array to hold page numbers
+	int arr[frames];
+
+	// No pages initially in frame,
+	// which is indicated by -1
+	memset(arr, -1, sizeof(arr));
+
+	string str[100];
+	string word = "";
+	for (auto pg : reference_string)
+	{
+		if (pg == ' ')
+		{
+			str[l] = word;
+			word = "";
+			l++;
+		}
+		else
+		{
+			word = word + pg;
+		}
+	}
+	str[l] = word;
+	l++;
+	int replace_pg;
+	int index;
+	// l=the length of array
+
+	for (i = 0; i < l; i++)
+	{
+		pg = stoi(str[i]);
+
+		// Finds if there exists a need to replace
+		// any page at all
+		cout << "\033[0;32;1m" << pg << "--->"
+			 << "\033[0m";
+
+		for (int i = 0; i < frames; i++)
+			cout << "|" << arr[i];
+
+		cout << "|";
+		if (!fifo_search(pg, arr, frames))
+		{
+			if (pos < frames)
+			{
+				arr[pos] = pg;
+				pos++;
+				cout << endl;
+			}
+			else
+			{
+				replace_pg = q.front();
+				q.pop();
+				cout << "\033[0;31;1m"
+					 << "--->" << replace_pg << "\033[0m" << endl;
+
+				for (int i = 0; i < frames; i++)
+				{
+					if (arr[i] == replace_pg)
+					{
+						index = i;
+						break;
+					}
+				}
+				arr[index] = pg;
+			}
+
+			// Update page faults
+			pf++;
+		}
+		else
+		{
+			cout << endl;
+			ph++;
+		}
+	}
+	// cout << "Total page faults = " << pf << "\n";
+	// cout << "Total page hits = " << ph << "\n";
+	double r = ph / (ph + pf);
+	// cout << "Hit Rate : " << r << endl;
+	return r;
+}
+
 // // If page found, updates the second chance bit to true
 static bool fifo_2nd_searchAndUpdate(int pg, int arr[], bool second_chance[], int frames)
 {
@@ -902,6 +998,139 @@ static bool fifo_2nd_searchAndUpdate(int pg, int arr[], bool second_chance[], in
 }
 
 double fifo_2nd_printHitsAndFaults(string reference_string,
+								   int frames)
+{
+	int pointer, i, l = 0, pg;
+	float pf, ph;
+	// initially we consider frame 0 is to be replaced
+	int pos = 0;
+	int replace_pg;
+	int index;
+
+	// number of page faults
+	pf = 0;
+	ph = 0;
+
+	// Create a array to hold page numbers
+	int arr[frames];
+
+	// No pages initially in frame,
+	// which is indicated by -1
+	memset(arr, -1, sizeof(arr));
+
+	// Create second chance array.
+	// Can also be a byte array for optimizing memory
+	bool second_chance[frames];
+
+	// Split the string into tokens,
+	// that is page numbers, based on space
+
+	string str[100];
+	string word = "";
+	for (auto pg : reference_string)
+	{
+		if (pg == ' ')
+		{
+			str[l] = word;
+			word = "";
+			l++;
+		}
+		else
+		{
+			word = word + pg;
+		}
+	}
+	str[l] = word;
+	l++;
+	// l=the length of array
+
+	for (i = 0; i < l; i++)
+	{
+		pg = stoi(str[i]);
+
+		// Finds if there exists a need to replace
+		// any page at all
+		// cout<<pg<<"---->";
+		cout << "\033[0;32;1m" << pg << "--->"
+			 << "\033[0m";
+
+		for (int i = 0; i < frames; i++)
+			cout << "|" << arr[i];
+
+		cout << "|";
+		if (!fifo_2nd_searchAndUpdate(pg, arr, second_chance, frames))
+		{
+			if (pos < frames)
+			{
+				arr[pos] = pg;
+				pos++;
+				cout << endl;
+			}
+			else
+			{
+				replace_pg = q2.front();
+
+				for (int i = 0; i < frames; i++)
+				{
+					if (arr[i] == replace_pg)
+					{
+						index = i;
+						break;
+					}
+				}
+				while (true)
+				{
+					// We found the page to replace
+					if (!second_chance[index])
+					{
+						arr[index] = pg;
+						q2.pop();
+						cout << "\033[0;31;1m"
+							 << "--->" << replace_pg << "\033[0m" << endl;
+						// cout<<"----->"<<replace_pg<<endl;
+						break;
+					}
+					else
+					{
+						// Mark it 'false' as it got one chance
+						second_chance[index] = false;
+						q2.pop();
+						q2.push(replace_pg);
+
+						replace_pg = q2.front();
+
+						for (int i = 0; i < frames; i++)
+						{
+							if (arr[i] == replace_pg)
+							{
+								index = i;
+								break;
+							}
+						}
+					}
+				}
+			}
+
+			// Update page faults
+			pf++;
+		}
+
+		else
+		{
+			cout << endl;
+			ph++;
+		}
+	}
+	// cout << "Total page faults = " << pf << "\n";
+	// cout << "Total page hits = " << ph << "\n";
+	double r = ph / (pf + ph);
+	std::cout.precision(2);
+	std::cout.setf(std::ios::fixed);
+	// cout << "Hit Rate : " << r << endl;
+	return r;
+}
+
+double fifo_2nd_printHitsAndFaults_2(string reference_string,
 								   int frames)
 {
 	int pointer, i, l = 0, pg;
@@ -1358,13 +1587,19 @@ void simulateAllPolicies()
 
 	// 4. FIFO
 	cout << "Simulating FIFO\n";
-	hitRate = fifo_printHitsAndFaults(input, frames);
+	//queue<int> empty;
+	q=queue<int>();
+	//q.swap(queue<int>());
+   	//std::swap( q, empty );
+	hitRate = fifo_printHitsAndFaults_2(input, frames);
 	cout << "Hit Rate : " << hitRate << "\n";
 	hitRates.push_back(hitRate);
 
 	// 5. FIFO with 2nd chance
 	cout << "Simulating FIFO with second chance\n";
-	hitRate = fifo_2nd_printHitsAndFaults(input, frames);
+	q2=queue<int>();
+    //std:swap( q2, empty );
+	hitRate = fifo_2nd_printHitsAndFaults_2(input, frames);
 	cout << "Hit Rate : " << hitRate << "\n";
 	hitRates.push_back(hitRate);
 
@@ -1495,6 +1730,7 @@ int main(int argc, const char *argv[])
 			{
 				// FIFO
 				takeInput(frames, input);
+				q=queue<int>();
 				double hitRate = fifo_printHitsAndFaults(input, frames);
 				cout << "Hit Rate : " << hitRate << "\n";
 				
@@ -1505,6 +1741,7 @@ int main(int argc, const char *argv[])
 			{
 				// FIFO with second chance
 				takeInput(frames, input);
+				q2=queue<int>();
 				double hitRate = fifo_2nd_printHitsAndFaults(input, frames);
 				cout << "Hit Rate : " << hitRate << "\n";
 			}
