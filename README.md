@@ -8,6 +8,7 @@ COMPILE USING THIS COMMAND
 g++ --std=c++17 clock.cpp ws.cpp wsclock.cpp main.cpp -o a.out
 
 then run as ./a.out
+
 Code will prompt to enter user wants to run in 'single policy mode' or 'all policies mode' ..
 
 then we need to enter number of frames
